@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const contactValidationMiddleware = require("../../contacts.validators");
+const contactValidationMiddleware = require("./contacts.validators");
 const {
   listContactsHandler,
   getContactByIdHandler,
   addContactHandler,
   removeContactHandler,
   updateContactHandler,
-} = require("../../contacts.controller");
+} = require("./contacts.controller");
 
 router.get("/", listContactsHandler);
 router.get("/:id", getContactByIdHandler);

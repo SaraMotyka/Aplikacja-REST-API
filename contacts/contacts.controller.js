@@ -4,7 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require("./models/contacts");
+} = require("./contacts.functions");
 
 const listContactsHandler = async (req, res) => {
   try {
