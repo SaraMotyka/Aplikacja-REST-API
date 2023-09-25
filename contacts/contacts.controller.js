@@ -9,6 +9,7 @@ const {
 const listContactsHandler = async (req, res) => {
   try {
     const contacts = await listContacts();
+    console.log(contacts);
     return res.status(200).json(contacts);
   } catch (error) {
     console.error(error);
@@ -30,27 +31,55 @@ const getContactByIdHandler = async (req, res) => {
 };
 
 const addContactHandler = async (req, res) => {
-  const newContact = await addContact(req.body);
-  if (!newContact) {
-    return res.status(400).json({ message: "Missing require fields" });
+  try {
+    const newContact = await addContact(req.body);
+    if (!newContact) {
+      return res.status(400).json({ message: "Missing require fields" });
+    }
+    return res.status(201).send(newContact);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Wystąpił błąd serwera." });
   }
-  return res.status(201).send(newContact);
 };
 
 const removeContactHandler = async (req, res) => {
-  const removedContact = await removeContact(req.params.id);
-  if (!removedContact) {
-    return res.status(404).json({ message: "Not found" });
+  try {
+    const removedContact = await removeContact(req.params.id);
+    if (!removedContact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    return res.status(200).json({ message: "Contact deleted" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Wystąpił błąd serwera." });
   }
-  return res.status(200).json({ message: "Contact deleted" });
 };
 
 const updateContactHandler = async (req, res) => {
-  const modifiedContact = await updateContact(req.params.id, req.body);
-  if (!modifiedContact) {
-    return res.status(400).json({ message: "Missing fields" });
+  try {
+    const modifiedContact = await updateContact(req.params.id, req.body);
+    if (!modifiedContact) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+    return res.status(200).json(modifiedContact);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Wystąpił błąd serwera." });
   }
-  return res.status(200).json(modifiedContact);
+};
+
+const updateContactStatusHandler = async (req, res) => {
+  try {
+    const { favorite } = req.body;
+    const updatedContact = await updateContact(req.params.id, { favorite });
+    if (!updatedContact) {
+      return res.status(400).json({ message: "Missing field favorite" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Wystąpił błąd serwera." });
+  }
 };
 
 module.exports = {
@@ -59,4 +88,5 @@ module.exports = {
   addContactHandler,
   removeContactHandler,
   updateContactHandler,
+  updateContactStatusHandler,
 };
