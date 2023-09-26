@@ -3,9 +3,8 @@ const router = express.Router();
 const contactValidationMiddleware = require("./contacts.validators");
 
 const contactsController = require("./contacts.controller");
-const { listContacts } = require("./contacts.functions");
 
-router.get("/", listContacts);
+router.get("/", contactsController.listContactsHandler);
 router.get("/:id", contactsController.getContactByIdHandler);
 router.post(
   "/",

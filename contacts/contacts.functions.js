@@ -1,15 +1,12 @@
 const { Contact } = require("./contacts.model");
 
-const listContacts = async (req, res) => {
+const listContacts = async () => {
   try {
-    const contacts = await Contact.find();
-    return res.status(200).json(contacts);
+    return await Contact.find();
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Wystąpił błąd serwera." });
+    console.error(error.message);
   }
 };
-
 const getContactById = async (id) => {
   try {
     const contact = await Contact.findById(id);
@@ -51,10 +48,33 @@ const updateContact = async (id, body) => {
   }
 };
 
+const updateStatusContact = async (id, body) => {
+  try {
+    const { favorite } = body;
+    if (!favorite) {
+      console.log("Favorite is empty");
+    }
+    const data = await Contact.findByIdAndUpdate(
+      { _id: id },
+      { favorite: favorite },
+      { new: true }
+    );
+    console.log(data);
+    if (data === null) {
+      return "Contact not found";
+    }
+    return data;
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  }
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

@@ -4,7 +4,19 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("./contacts.functions");
+
+const listContactsHandler = async (req, res) => {
+  try {
+    const contacts = await listContacts();
+    console.log(contacts);
+    return res.status(200).json(contacts);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Wystąpił błąd serwera." });
+  }
+};
 
 const getContactByIdHandler = async (req, res) => {
   try {
@@ -35,7 +47,7 @@ const addContactHandler = async (req, res) => {
 const removeContactHandler = async (req, res) => {
   try {
     const removedContact = await removeContact(req.params.id);
-    if (!removedContact) {
+    if (removedContact) {
       return res.status(404).json({ message: "Not found" });
     }
     return res.status(200).json({ message: "Contact deleted" });
@@ -59,11 +71,17 @@ const updateContactHandler = async (req, res) => {
 };
 
 const updateContactStatusHandler = async (req, res) => {
+  const { favorite } = req.body;
+  if (favorite === null) {
+    return res.status(400).json({ message: "Missing field favorite" });
+  }
   try {
-    const { favorite } = req.body;
-    const updatedContact = await updateContact(req.params.id, { favorite });
-    if (!updatedContact) {
-      return res.status(400).json({ message: "Missing field favorite" });
+    const result = await updateStatusContact(req.params.id, req.body);
+
+    if (!result) {
+      return res.status(404).json({ message: "Not found" });
+    } else {
+      return res.status(200).json(result);
     }
   } catch (error) {
     console.error(error);
@@ -72,7 +90,7 @@ const updateContactStatusHandler = async (req, res) => {
 };
 
 module.exports = {
-  // listContactsHandler,
+  listContactsHandler,
   getContactByIdHandler,
   addContactHandler,
   removeContactHandler,
