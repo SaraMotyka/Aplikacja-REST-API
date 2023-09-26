@@ -1,13 +1,12 @@
 const { Contact } = require("./contacts.model");
 
-const listContacts = async () => {
+const listContacts = async (req, res) => {
   try {
     const contacts = await Contact.find();
-    console.log("List of contacts:", contacts);
-    return contacts;
+    return res.status(200).json(contacts);
   } catch (error) {
-    console.error(error.message);
-    return [];
+    console.error(error);
+    return res.status(500).json({ error: "Wystąpił błąd serwera." });
   }
 };
 

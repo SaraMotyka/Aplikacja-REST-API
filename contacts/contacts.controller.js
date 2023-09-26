@@ -6,17 +6,6 @@ const {
   updateContact,
 } = require("./contacts.functions");
 
-const listContactsHandler = async (req, res) => {
-  try {
-    const contacts = await listContacts();
-    console.log(contacts);
-    return res.status(200).json(contacts);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Wystąpił błąd serwera." });
-  }
-};
-
 const getContactByIdHandler = async (req, res) => {
   try {
     const contact = await getContactById(req.params.id);
@@ -83,7 +72,7 @@ const updateContactStatusHandler = async (req, res) => {
 };
 
 module.exports = {
-  listContactsHandler,
+  // listContactsHandler,
   getContactByIdHandler,
   addContactHandler,
   removeContactHandler,
