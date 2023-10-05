@@ -3,13 +3,12 @@ const User = require("./user.model");
 const authService = require("../auth/auth.service");
 
 const signUpHandler = async (req, res, next) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    return res.status(409).json({ message: "Email in use" });
-  }
-
   try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(409).json({ message: "Email in use" });
+    }
     const newUser = await userDao.createUser({ email, password });
     return res.status(201).json({
       user: {
@@ -19,7 +18,7 @@ const signUpHandler = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.error(error.message);
+    return next(error);
   }
 };
 
@@ -44,7 +43,7 @@ const loginHandler = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.error(error.message);
+    return next(error);
   }
 };
 
