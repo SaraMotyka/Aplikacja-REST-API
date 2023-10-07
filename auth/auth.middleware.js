@@ -1,6 +1,5 @@
 const authService = require("./auth.service");
 const User = require("../users/user.model");
-const userDao = require("../users/users.dao");
 
 const getTokenFromHeaders = (headers) => {
   return headers.authorization?.replace("Bearer ", "");
