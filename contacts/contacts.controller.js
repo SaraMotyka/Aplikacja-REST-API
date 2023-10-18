@@ -10,7 +10,6 @@ const {
 const listContactsHandler = async (req, res) => {
   try {
     const contacts = await listContacts();
-    console.log(contacts);
     return res.status(200).json(contacts);
   } catch (error) {
     console.error(error);

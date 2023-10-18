@@ -16,11 +16,13 @@ usersRouter.post(
   userValidateMiddleware,
   usersController.loginHandler
 );
+usersRouter.post("/verify", usersController.resendVerificationHandler);
 usersRouter.get("/secret", authMiddleware, (req, res) =>
   res.status(200).json({ message: "Secret path." })
 );
 usersRouter.get("/logout", authMiddleware, usersController.logoutHandler);
 usersRouter.get("/current", authMiddleware, usersController.currentHandler);
+usersRouter.get("/verify/:verificationToken", usersController.verifyHandler);
 usersRouter.patch(
   "/avatars",
   authMiddleware,
