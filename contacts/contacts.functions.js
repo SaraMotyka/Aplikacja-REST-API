@@ -59,7 +59,7 @@ const updateStatusContact = async (id, body) => {
       { favorite: favorite },
       { new: true }
     );
-    console.log(data);
+
     if (data === null) {
       return "Contact not found";
     }
